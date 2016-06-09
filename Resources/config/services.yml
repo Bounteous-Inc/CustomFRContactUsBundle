@@ -1,0 +1,19 @@
+parameters:
+    demacmedia_frcontact_us.embedded_form.class: DemacMedia\Bundle\CustomFRContactUsBundle\Form\Type\ContactRequestType
+
+services:
+    demacmedia_frcontact_us.embedded_form:
+        class: %demacmedia_frcontact_us.embedded_form.class%
+        tags:
+            - { name: oro_embedded_form, label: demacmedia.frcustomcontactus.frembedded_form.label }
+            - { name: form.type, alias: demacmedia_custom_frcontactus_contact_request }
+
+    demacmedia_frcontact_us.contact_request.form:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - "demacmedia_custom_frcontactus_contact_request"
+            - "demacmedia_custom_frcontactus_contact_request"
+            - null
+            - { dataChannelField : true }

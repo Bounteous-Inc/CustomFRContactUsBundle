@@ -1,0 +1,2 @@
+bundles:
+    - { name: DemacMedia\Bundle\CustomFRContactUsBundle\DemacMediaCustomFRContactUsBundle, priority: 30 }

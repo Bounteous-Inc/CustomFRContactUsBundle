@@ -1,0 +1,114 @@
+definitions:
+    account_creation_for_contactus:
+        label: 'Create or Update accounts for each ContactUS request.'
+        enabled: true
+        entity:  OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest
+        order:   10
+        actions_configuration:
+            - @tree: # set Contact
+                actions:
+                    - @assign_value:
+                        attribute: $.firstName
+                        value: $firstName
+                    - @assign_value:
+                        attribute: $.lastName
+                        value: $lastName
+                    - @assign_value:
+                        attribute: $.email
+                        value: $email
+                    - @assign_value:
+                        attribute: $.phone
+                        value: $phone
+                    - @assign_value:
+                        attribute: $.orderId
+                        value: $orderId
+                    - @assign_value:
+                        attribute: $.comment
+                        value: $comment
+
+                    - '@format_string': # generate Account name
+                        attribute: $.accountName
+                        string:    '%firstName% %lastName%'
+                        arguments:
+                            firstName: $firstName
+                            lastName:  $lastName
+
+                    - @find_entity:
+                        parameters:
+                            class: OroCRM\Bundle\ContactBundle\Entity\Contact
+                            attribute: $.findContactByEmail
+                            where:
+                                email: $.email
+                    - @find_entity:
+                        parameters:
+                            class: OroCRM\Bundle\ContactBundle\Entity\Source
+                            attribute: $.contactSourceWebsite
+                            where:
+                                name: 'website'
+
+                    - @tree:
+                        conditions:
+                            @and:
+                                - @empty: $.findContactByEmail
+                        actions:
+                            - @create_entity: # create Contact
+                                class:     OroCRM\Bundle\ContactBundle\Entity\Contact
+                                attribute: $.contact
+                                data:
+                                    email:        $.email
+                                    firstName:    $.firstName
+                                    lastName:     $.lastName
+                                    source:       $.contactSourceWebsite
+                                    organization: $owner
+
+                            - @tree: # add Contact Phone
+                                  conditions:
+                                      @not_empty: $.phone
+                                  actions:
+                                      - @create_entity: # create Contact phone
+                                          class:     OroCRM\Bundle\ContactBundle\Entity\ContactPhone
+                                          attribute: $.contactPhone
+                                          data:
+                                              phone:   $phone
+                                              primary: $phone
+                                      - @call_method: # add Contact Phone to Contact
+                                          object: $.contact
+                                          method: addPhone
+                                          method_parameters: [$.contactPhone]
+
+                            - @tree: # add Contact Email
+                                conditions:
+                                    @not_empty: $.email
+                                actions:
+                                    - @create_entity: # create Contact Email
+                                        class:     OroCRM\Bundle\ContactBundle\Entity\ContactEmail
+                                        attribute: $.contactEmail
+                                        data:
+                                            email:   $.email
+                                            primary: true
+                                    - @call_method: # add Contact Email to Contact
+                                        object: $.contact
+                                        method: addEmail
+                                        method_parameters: [$.contactEmail]
+                                    - @unset_value: [$.contactEmail]
+
+                            - @create_entity: # create Account
+                                parameters:
+                                    class:     OroCRM\Bundle\AccountBundle\Entity\Account
+                                    attribute: $.account
+                                    data:
+                                        defaultContact: $.contact
+                                        name:           $.accountName
+#                                        owner:          $owner
+                                        organization:   $owner
+
+triggers:
+    account_creation_for_contactus:
+        -
+            event:    create
+            priority: 5
+            queued:   true
+        -
+            event:    update
+            priority: 5
+            queued:   true

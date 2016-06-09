@@ -1,0 +1,72 @@
+# demacmedia.frcustomcontactus.frembedded_form.label
+# demacmedia.frcustomcontactus.frcontactrequest
+
+demacmedia:
+    frcustomcontactus:
+        frembedded_form:
+            label: 'Personnalisé Demande de contact'
+        required_fields:
+            label: '* Champs requis'
+        frcontactrequest:
+            entity_label:                   Demande de contact
+            entity_plural_label:            Demandes de contact
+            id.label:                       ID
+            first_name.label:               Prénom
+            last_name.label:                Nom
+            email_address.label:            Email
+            phone.label:                    Téléphone
+            comment.label:                  Commentaire
+            feedback.label:                 Remarques
+            contact_reason.label:           Raison du contact
+            choose_contact_reason.label:    Choisir la raison du contact...
+            status.label:                   Statut
+            opportunity.label:              Opportunité
+            lead.label:                     Piste commerciale
+            calls.label:                    Appels
+            emails.label:                   Emails
+            workflow_item.label:            Élément du workflow
+            workflow_step.label:            Etape du workflow
+            organization_name.label:        Nom de l'organisation
+            preferred_contact_method.label: Méthode de contact préférée
+            owner.label:                    Organisation
+            data_channel.label:             Canal
+
+            datagrid:
+                update: Modifier
+                delete: Supprimer
+                view:   Afficher
+
+            method:
+                email: Email
+                phone: Téléphone
+                both:  Téléphone et email
+
+            widget:
+                info:
+                    title: Détails de la demande de contact
+            entity:
+                saved: La demande de contact a été correctement sauvegardée
+
+            order_id:
+                label: Numéro de Commande (S'il y a lieu)
+
+        contactreason:
+            entity_label: Raison du contact
+            entity_plural_label: Raisons du contact
+            entity_description: Représente la raison d'une prise de contact
+            id:
+                label: ID
+            label:
+                label: Libellé
+
+        block:
+            general:                Général
+            additional:             Additionnel
+            request_information:    Demande d'Information
+
+
+orocrm:
+    contactus:
+        contactrequest:
+            order_id:
+                label: Numéro de Commande (S'il y a lieu)
